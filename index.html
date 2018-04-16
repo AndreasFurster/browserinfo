@@ -8,19 +8,22 @@
 <body>
 <script language="javascript">
 function ShowBrowserDetails() {
-  var BrowserName = navigator.appName; //gets the name of the browser
-  var appVersion = navigator.appVersion.substring(0,4); // browser version
   var isJavaEnabled = navigator.javaEnabled(); // checks if Java is enabled
   var screenWidth = screen.width; // get screen width
   var screenHeight = screen.height; // get screen height
   // the following stores the output in outputStr variable
   var outputStr = "<h1>Browser details</h1>";
-  outputStr = outputStr + "<p>Name: " + BrowserName;
-  outputStr = outputStr + "<br>Version: " + appVersion;
+  outputStr = outputStr + "<p>Code Name: " + navigator.appCodeName;
+  outputStr = outputStr + "<p>Name: " + navigator.appName;
+  outputStr = outputStr + "<br>Version: " + navigator.appVersion;
+  outputStr = outputStr + "<br>Platform: " + navigator.platform;
+  outputStr = outputStr + "<br>Product: " + navigator.product;
+  outputStr = outputStr + "<br>UserAgent: " + navigator.userAgent;
+  outputStr = outputStr + "<br>Vendor: " + navigator.vendor;
   outputStr = outputStr + "<br>Java enabled: " + isJavaEnabled;
   outputStr = outputStr + "<br>Screen width: " + screenWidth;
   outputStr = outputStr + "<br>Screen height: " + screenHeight + "</p>";
-  document.write (outputStr); // print
+  document.write (outputStr);
 }
 </script>
 <script language="javascript">ShowBrowserDetails();</script>
