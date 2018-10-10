@@ -1,31 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>BrowserInfo</title>
-<meta charset="utf-8" />
-</head>
+  <head>
+    <title>BrowserInfo</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous" />
+    <style>
+      dd { margin-left: 20px; }
+    </style>
+  </head>
 
-<body>
-<script language="javascript">
-function ShowBrowserDetails() {
-  var isJavaEnabled = navigator.javaEnabled(); // checks if Java is enabled
-  var screenWidth = screen.width; // get screen width
-  var screenHeight = screen.height; // get screen height
-  // the following stores the output in outputStr variable
-  var outputStr = "<h1>Browser details</h1>";
-  outputStr = outputStr + "<p>Code Name: " + navigator.appCodeName;
-  outputStr = outputStr + "<p>Name: " + navigator.appName;
-  outputStr = outputStr + "<br>Version: " + navigator.appVersion;
-  outputStr = outputStr + "<br>Platform: " + navigator.platform;
-  outputStr = outputStr + "<br>Product: " + navigator.product;
-  outputStr = outputStr + "<br>UserAgent: " + navigator.userAgent;
-  outputStr = outputStr + "<br>Vendor: " + navigator.vendor;
-  outputStr = outputStr + "<br>Java enabled: " + isJavaEnabled;
-  outputStr = outputStr + "<br>Screen width: " + screenWidth;
-  outputStr = outputStr + "<br>Screen height: " + screenHeight + "</p>";
-  document.write (outputStr);
-}
-</script>
-<script language="javascript">ShowBrowserDetails();</script>
-</body>
+  <body>
+    
+    <div class="container">
+      <h1>Browser details</h1>
+      <noscript>
+        <dl>
+          <dt>JavaScript enabled</dt>
+          <dd>No</dd>
+        </dl>
+
+        <strong>Please enable JavaScript for more browser details</strong>
+      </noscript>
+
+      <dl id="browserInfoList"></dl>
+    </div>
+    <script language="javascript">
+      function ShowBrowserDetails() {
+
+        outputStr = "";
+        var list = document.getElementById('browserInfoList');
+
+        var isJavaEnabled = navigator.javaEnabled(); // checks if Java is enabled
+        var screenWidth = screen.width; // get screen width
+        var screenHeight = screen.height; // get screen height
+        
+        // Add the following to the info list
+        addDefinition(list, "JavaScript enabled", true)
+        addDefinition(list, "UserAgent", navigator.userAgent);
+        addDefinition(list, "Code Name", navigator.appCodeName);
+        addDefinition(list, "Name", navigator.appName);
+        addDefinition(list, "Version", navigator.appVersion);
+        addDefinition(list, "Platform", navigator.platform);
+		addDefinition(list, "Operating system", checkOS());
+        addDefinition(list, "Product", navigator.product);
+        addDefinition(list, "Vendor", navigator.vendor);
+        addDefinition(list, "Java enabled", isJavaEnabled);
+        addDefinition(list, "Screen size", screenWidth + " x " + screenHeight);
+        addDefinition(list, "Cookies enabled", checkCookie());
+        addDefinition(list, "DoNotTrack", checkDoNotTrack());
+      }
+
+      // Add definition to definition list
+      function addDefinition(list, key, value){
+        if(typeof(value) === "boolean"){
+          value = value ? 'Yes' : 'No';
+        }
+
+        var dt = document.createElement("dt");
+        var dtText = document.createTextNode(key);
+        dt.appendChild(dtText);
+
+        var dd = document.createElement("dd");
+        var ddText = document.createTextNode(value);
+        dd.appendChild(ddText);
+
+        list.appendChild(dt);
+        list.appendChild(dd);
+      }
+
+      // Cookie check with fallback
+      function checkCookie(){
+        var cookieEnabled = navigator.cookieEnabled;
+        if (!cookieEnabled){ 
+            document.cookie = "testcookie";
+            cookieEnabled = document.cookie.indexOf("testcookie")!=-1;
+        }
+
+        return cookieEnabled;
+      }
+
+      function checkDoNotTrack(){
+        if (window.doNotTrack || navigator.doNotTrack || navigator.msDoNotTrack || 'msTrackingProtectionEnabled' in window.external) {
+
+            // The browser supports Do Not Track!
+            if (window.doNotTrack == "1" || navigator.doNotTrack == "yes" || navigator.doNotTrack == "1" || navigator.msDoNotTrack == "1" || window.external.msTrackingProtectionEnabled()) {
+                // Do Not Track is enabled!
+
+                return "Enabled";
+            } else {
+                // Do Not Track is disabled!
+                return "Disabled";
+            }
+        } else {
+            // Do Not Track is not supported
+            return "Not supported or disabled";
+        }
+      }
+	  
+	  function checkOS(){
+		if (window.navigator.userAgent.indexOf("Windows NT 10.0")!= -1) return "Windows 10";
+		if (window.navigator.userAgent.indexOf("Windows NT 6.2") != -1) return "Windows 8";
+		if (window.navigator.userAgent.indexOf("Windows NT 6.1") != -1) return "Windows 7";
+		if (window.navigator.userAgent.indexOf("Windows NT 6.0") != -1) return "Windows Vista";
+		if (window.navigator.userAgent.indexOf("Windows NT 5.1") != -1) return "Windows XP";
+		if (window.navigator.userAgent.indexOf("Windows NT 5.0") != -1) return "Windows 2000";
+		if (window.navigator.userAgent.indexOf("Mac")            != -1) return "Mac/iOS";
+		if (window.navigator.userAgent.indexOf("X11")            != -1) return "UNIX";
+		if (window.navigator.userAgent.indexOf("Linux")          != -1) return "Linux";
+	  
+		return "Unknown";
+	  }
+    </script>
+    <script language="javascript">ShowBrowserDetails();</script>
+  </body>
 </html>
