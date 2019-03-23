@@ -26,9 +26,12 @@
             <strong>Please enable JavaScript for more browser details</strong>
         </noscript>
 
-        <dl id="browserInfoList"></dl>
+        <dl id="browserInfoList">
+          <dt>IP Address</dt>
+          <dd id="client-ip"></dd>
+        </dl>
     </div>
-    <script language="javascript">
+    <script>
         function ShowBrowserDetails() {
 
             outputStr = "";
@@ -114,8 +117,14 @@
 
             return "Unknown";
         }
-    </script>
-    <script language="javascript">ShowBrowserDetails();</script>
+
+        function onIpRecieved(result) {
+          document.getElementById('client-ip').innerHTML = result.ip;
+        }
+
+        ShowBrowserDetails();
+      </script>
+      <script src="https://api.ipify.org?format=jsonp&callback=onIpRecieved"></script>
 </body>
 
 </html>
